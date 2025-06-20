@@ -1,0 +1,122 @@
+body {
+  background: #1c1c1e;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+form input,
+form select,
+form button {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: none;
+}
+
+form button {
+  grid-column: span 2;
+  background: #6c5ce7;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+form button:hover {
+  background: #5a4ed9;
+}
+
+#searchBar {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: none;
+  width: 97.5%;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.game-card {
+  background: #2c2c2e;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
+}
+
+.game-card h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.game-card p {
+  margin: 0.3rem 0;
+}
+
+.game-card button {
+  margin-right: 10px;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  color: rgb(3, 3, 3);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.game-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 2px solid #6c5ce7;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.game-info {
+  flex: 1;
+}
+
+.game-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.game-actions button {
+  padding: 0.4rem 0.6rem;
+  font-weight: bold;
+  cursor: pointer;
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.game-actions button:hover {
+  background: #ddd;
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>🎮 How Long to Beat</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .alphabet-nav {
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .alphabet-nav button {
+      background: #f0f0f0;
+      margin: 0.2rem;
+      border: none;
+      padding: 0.4rem 0.6rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .alphabet-nav button:hover {
+      background: #dcdcdc;
+    }
+
+    .alphabet-nav button.active {
+      background-color: #4caf50;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎮 How Long to Beat</h1>
+
+    <input type="text" id="searchBar" placeholder="Search games by name...">
+
+    <h2>Add New Games:</h2>
+    <form id="gameForm">
+      <input type="hidden" id="gameId">
+      <input type="text" placeholder="Game Name" id="name" required>
+      <input type="number" placeholder="Main Story Hours" id="mainStoryHours" required>
+      <input type="number" placeholder="Completionist Hours" id="completionistHours" required>
+      <select id="platform" required>
+        <option value="">-- Select Platform --</option>
+        <option value="PC">PC</option>
+        <option value="PS4">PS4</option>
+        <option value="PS5">PS5</option>
+        <option value="Xbox">Xbox</option>
+        <option value="Switch">Switch</option>
+        <option value="Mobile">Mobile</option>
+      </select>
+      <select id="multiplayer">
+        <option value="false">Single Player</option>
+        <option value="true">Multiplayer</option>
+      </select>
+      <button type="submit">Save Game</button>
+    </form>
+
+    <div class="alphabet-nav" id="alphabetNav"></div>
+
+    <div id="gameList" class="game-list"></div>
+  </div>
+
+  <script>
+    const gameForm = document.getElementById("gameForm");
+    const gameList = document.getElementById("gameList");
+    const searchBar = document.getElementById("searchBar");
+    const alphabetNav = document.getElementById("alphabetNav");
+
+    const gameIdField = document.getElementById("gameId");
+    const nameField = document.getElementById("name");
+    const mainStoryField = document.getElementById("mainStoryHours");
+    const completionistField = document.getElementById("completionistHours");
+    const platformField = document.getElementById("platform");
+    const multiplayerField = document.getElementById("multiplayer");
+
+    let allGames = [];
+
+    async function fetchGames() {
+      const res = await fetch("/api/games");
+      const games = await res.json();
+      allGames = games;
+      displayGames(games);
+    }
+
+    function displayGames(games) {
+      gameList.innerHTML = games.map(game => `
+    <div class="game-card">
+      <div class="game-info">
+        <h3>${game.name}</h3>
+        <p><strong>Main Story:</strong> ${game.mainStoryHours} hrs</p>
+        <p><strong>Completionist:</strong> ${game.completionistHours} hrs</p>
+        <p><strong>Platform:</strong> ${game.platform}</p>
+        <p><strong>Multiplayer:</strong> ${game.multiplayer ? 'Yes' : 'No'}</p>
+      </div>
+      <div class="game-actions">
+        <button onclick="editGame('${game._id}')">Edit</button>
+        <button onclick="deleteGame('${game._id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+    }
+
+
+    function renderAlphabetNav() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+      const all = `<button class="active" data-letter="ALL">All</button>`;
+      const letterButtons = letters.map(letter =>
+        `<button data-letter="${letter}">${letter}</button>`
+      ).join("");
+      alphabetNav.innerHTML = all + letterButtons;
+
+      // Add click listeners
+      [...alphabetNav.querySelectorAll("button")].forEach(button => {
+        button.addEventListener("click", () => {
+          const letter = button.dataset.letter;
+          setActiveButton(button);
+
+          if (letter === "ALL") {
+            displayGames(allGames);
+          } else {
+            filterByLetter(letter);
+          }
+        });
+      });
+    }
+
+    function setActiveButton(activeBtn) {
+      const buttons = alphabetNav.querySelectorAll("button");
+      buttons.forEach(btn => btn.classList.remove("active"));
+      activeBtn.classList.add("active");
+    }
+
+    function filterByLetter(letter) {
+      const filtered = allGames.filter(game =>
+        game.name.toUpperCase().startsWith(letter)
+      );
+      displayGames(filtered);
+    }
+
+    gameForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        name: nameField.value,
+        mainStoryHours: Number(mainStoryField.value),
+        completionistHours: Number(completionistField.value),
+        platform: platformField.value,
+        multiplayer: multiplayerField.value === "true"
+      };
+
+      const gameId = gameIdField.value;
+
+      if (gameId) {
+        await fetch(`/api/games/${gameId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      } else {
+        await fetch("/api/games", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      }
+
+      gameForm.reset();
+      gameIdField.value = "";
+      fetchGames();
+    });
+
+    function editGame(id) {
+      const game = allGames.find(g => g._id === id);
+      gameIdField.value = game._id;
+      nameField.value = game.name;
+      mainStoryField.value = game.mainStoryHours;
+      completionistField.value = game.completionistHours;
+      platformField.value = game.platform;
+      multiplayerField.value = game.multiplayer.toString();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteGame(id) {
+      await fetch(`/api/games/${id}`, { method: "DELETE" });
+      fetchGames();
+    }
+
+    searchBar.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase();
+      const filteredGames = allGames.filter(game =>
+        game.name.toLowerCase().includes(query)
+      );
+      displayGames(filteredGames);
+    });
+
+    renderAlphabetNav();
+    fetchGames();
+  </script>
+</body>
+
+</html>
