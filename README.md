@@ -29,8 +29,6 @@ A full-stack web application that lets users track video games by how long they 
 
 👉 [View Deployed App](https://howlongtobeat.onrender.com/)
 
-*(Replace this with your actual deployment link once ready)*
-
 ---
 
 ## 📁 Project Structure
