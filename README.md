@@ -153,6 +153,46 @@ curl -X PUT http://localhost:5000/api/games/<game_id> \
 ```bash
 curl -X DELETE http://localhost:5000/api/games/<game_id>
 ```
+---
+
+## 🧪 Testing Summary
+
+This project is well-tested with a focus on:
+
+- ✅ **Unit Tests** for the Mongoose model (`Game.js`)
+- ✅ **Integration Tests** that verify actual database interactions
+- ✅ **API Tests** to ensure CRUD endpoints function as expected
+
+### ✅ Test Coverage
+| Metric        | Coverage   |
+|---------------|------------|
+| Statements    | **77.27%** |
+| Branches      | **100%**   |
+| Functions     | **50%**    |
+| Lines         | **77.27%** |
+
+### ⚡ How to Run Tests
+```bash
+npm test
+```
+
+### 📊 How to Generate Coverage Report
+```bash
+npx jest --coverage
+```
+
+After running the above, open this file in your browser to view the detailed HTML coverage report:
+```
+coverage/lcov-report/index.html
+```
+
+### 📸 Screenshot
+
+> Insert a screenshot of your test coverage report here for reference.
+
+```markdown
+![Test Coverage Screenshot](public/250622_11h35m39s_screenshot.png)
+```
 
 ---
 
