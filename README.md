@@ -188,11 +188,7 @@ coverage/lcov-report/index.html
 
 ### 📸 Screenshot
 
-> Insert a screenshot of your test coverage report here for reference.
-
-```markdown
 ![Test Coverage Screenshot](public/250622_11h35m39s_screenshot.png)
-```
 
 ---
 
