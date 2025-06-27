@@ -201,6 +201,45 @@ The application was tested using [Keploy](https://keploy.io/) for AI-driven API 
 
 ![Keploy Test Coverage](public/250627_18h47m28s_screenshot.png)
 
+⚙️ CI/CD Integration with GitHub Actions
+----------------------------------------
+
+We have successfully integrated Keploy API Testing in our GitHub Actions workflow. Here's a snapshot of the pipeline:
+
+### 🔧 Workflow File: `.github/workflows/keploy-ci.yml`
+
+```
+name: keploy-tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-keploy-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Keploy CLI
+        run: |
+          curl --silent -L https://keploy.io/ent/install.sh | bash
+
+      - name: Run Keploy Test Suite
+        run: |
+          export KEPLOY_API_KEY=${{ secrets.KEPLOY_API_KEY }}
+          keploy test-suite --app=e768c6f5-99de-4ef3-904d-e0fefe79bae3 --base-path https://howlongtobeat.onrender.com/api/games --cloud
+
+```
+
 📘 For more information on how to get started with Keploy, visit [docs.keploy.io](https://docs.keploy.io).
 
 ## 📃 License
