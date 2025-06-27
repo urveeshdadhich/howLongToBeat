@@ -192,6 +192,16 @@ coverage/lcov-report/index.html
 
 ---
 
+## 📊 API Test Coverage
+
+The application was tested using [Keploy](https://keploy.io/) for AI-driven API testing. A total of 20 test cases were executed.
+
+- ✅ 19 tests passed successfully.
+- ❌ 1 test failed as expected (delete operation on a non-existent game ID), validating correct error handling.
+
+![Keploy Test Coverage](public/250627_18h47m28s_screenshot.png)
+
+
 ## 📃 License
 
 This project is licensed under the [MIT License](LICENSE)
